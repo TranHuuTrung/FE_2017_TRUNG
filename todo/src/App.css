@@ -1,0 +1,61 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/* css for new navbar logo */
+.navbar{
+  border-radius: 0px;
+}
+.text-right{
+  float: right;
+  cursor: pointer;
+}
+.text-center{
+  text-align: center;
+}
+.user-form-signin{
+  font-size: 90px;
+  color: #bbbbbbbb;
+}
+.mt-20{
+  margin-top: 20px;
+}
+.mt-50{
+  margin-top: 50px;
+}
+.ml-5{
+  margin-left: 5px;
+}
+.mr-5{
+  margin-right: 5px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
