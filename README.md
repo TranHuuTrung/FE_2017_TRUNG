@@ -9,22 +9,13 @@ FE_2017_TRUNG/
   package-lock.json
   package.json
   new-todo/
-    node_modules/
-    public/
-      css/
-      fonts/
-      js/
-      index.html
-      favicon.ico
-    src/
-      components/
-      App.css
-      App.js
-      App.test.js
-      index.css
-      index.js
-      logo.svg
   todo/
+  solution01-react/
+  
+```
+```
+Structure new-todo folder
+  new-todo/
     node_modules/
     public/
       css/
@@ -40,6 +31,32 @@ FE_2017_TRUNG/
       index.css
       index.js
       logo.svg
+
+
+```
+```
+Structure todo folder
+  todo/
+   node_modules/
+    public/
+      css/
+      fonts/
+      js/
+      index.html
+      favicon.ico
+    src/
+      components/
+      App.css
+      App.js
+      App.test.js
+      index.css
+      index.js
+      logo.svg
+
+
+```
+```
+Structure solution01-react folder
   solution01-react/
     node_modules/
     public/
@@ -59,6 +76,8 @@ FE_2017_TRUNG/
       index.js
       logo.svg
   
+
+
 ```
 
 For the project to build, **these files must exist with exact filenames**:
