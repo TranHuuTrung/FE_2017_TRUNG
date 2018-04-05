@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 class TaskForm extends Component {
     constructor(props){
+        super(props);
         this.state={
             name: '',
             status: false
@@ -8,6 +9,31 @@ class TaskForm extends Component {
     }
     onCloseForm = () =>{
         this.props.onCloseForm();
+    }
+    onHandleChange = (event) =>{
+        var target = event.target;
+        var name   = target.name;
+        var value  = target.value;
+        if( name === 'status'){
+           value =  target.value === 'true'? true : false;
+        }
+        this.setState({
+            [name] : value
+        });
+    }
+    onSubmit = (event) =>{
+        event.preventDefault();
+        // console.log(this.state);
+        this.props.onSubmit(this.state);
+        this.onClear();
+        this.onCloseForm();
+        
+    }
+    onClear = () =>{
+        this.setState({
+            name : '',
+            status: false
+        });
     }
     render() {
         return (
@@ -23,7 +49,7 @@ class TaskForm extends Component {
                 </div>
                 <div className="panel-body">
                     
-                    <form>
+                    <form onSubmit= { this.onSubmit }>
                         <div className="form-group">
                             <label >Tên công việc:</label>
                             <input 
@@ -32,19 +58,29 @@ class TaskForm extends Component {
                                 className="form-control" 
                                 placeholder="Nhập tên công việc" 
                                 value= { this.state.name }
+                                onChange={ this.onHandleChange }
                                 />
                             
                         </div>
                         <label >Trạng thái:</label>
-                        <select className="form-control" name="status">
+                        <select 
+                            className="form-control" 
+                            name="status"
+                            value= { this.state.status }
+                            onChange={ this.onHandleChange }
+                            >
                             <option value={true}>Kích hoạt </option>
                             <option value={false}>Ẩn</option>
                         </select> <br/>
                         <div className="text-center">
-                            <button type="button" className="btn btn-success">
+                            <button type="submit" className="btn btn-success">
                                 <span className="fa fa-plus"></span>&nbsp;Lưu Lại
                             </button>&nbsp;
-                            <button type="button" className="btn btn-danger">
+                            <button 
+                                type="button" 
+                                className="btn btn-danger"
+                                onClick = { this.onClear }
+                            >
                                 <span className="fa fa-close"></span>&nbsp;Hủy bỏ
                             </button>
                         </div>   

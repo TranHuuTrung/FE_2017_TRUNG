@@ -21,28 +21,6 @@ class App extends Component {
 			})
 		}
 	}
-	onGenarateData = () =>{
-		var tasks = [
-			{
-				id: this.genarateID(),
-				name: 'Học React',
-				status: true
-
-			},
-			{
-				id: this.genarateID(),
-				name: 'Ngủ',
-				status: false
-
-			}
-		];
-		this.setState({
-			tasks: tasks
-		});
-		
-		localStorage.setItem('tasks', JSON.stringify(tasks));
-		
-	}
 	s4(){
 		return Math.floor((1+ Math.random())*0x10000).toString(16).substring(1);
 	}
@@ -59,9 +37,62 @@ class App extends Component {
 			isDisplayForm: false
 		})
 	}
+	onSubmit = (data) =>{
+		var { tasks } = this.state;
+		data.id = this.genarateID();
+		tasks.push(data);
+		this.setState({
+			tasks : tasks
+		});
+		localStorage.setItem('tasks', JSON.stringify(tasks));
+		
+	}
+	onUpdateStatus = (id) => {
+		var { tasks } = this.state;
+		var index = this.findIndex(id);
+		if(index !== -1){
+			tasks[index].status = !tasks[index].status;
+			this.setState({
+				tasks : tasks
+			});
+		}
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+		
+	}
+	findIndex = (id) => {
+		var { tasks } = this.state;
+		var result = -1;
+		tasks.forEach((task, index) =>{
+			if(task.id === id){
+				result = index;
+			}
+		});
+		return result;
+	}
+	onDelete = (id) =>{
+		var { tasks } = this.state;
+		var index = this.findIndex(id);
+		if( index !== -1){
+			tasks.splice(index, 1);
+			this.setState({
+				tasks : tasks
+			});
+			localStorage.setItem('tasks', JSON.stringify(tasks));
+		}
+		this.onCloseForm();
+		
+	}
+	onUpdate = (id) =>{
+		var { tasks } = this.state;
+		console.log(id);
+		
+	}
 	render() {
 		var { tasks, isDisplayForm } = this.state; //var tasks = this.state.tasks
-		var eleForm = isDisplayForm ? <TaskForm onCloseForm={ this.onCloseForm }/> : '';
+		var eleForm = isDisplayForm 
+					  ? <TaskForm 
+					    	onSubmit ={ this.onSubmit } 
+					  		onCloseForm={ this.onCloseForm }/> : '';
 		return (
 		<div className="container">
 				<div className="text-center mt-30">
@@ -81,21 +112,19 @@ class App extends Component {
 						>
 							<span className="fa fa-plus"></span>&nbsp;Thêm công việc
 						</button>
-						&nbsp;
-						<button 
-							type="button" 
-							className="btn btn-danger mb-15"
-							onClick={ this.onGenarateData }
-						>
-							Genarate 
-						</button>
+					
 						{/* Search and Sort */}
 						<div className="row mb-15">
 							<Control />
 						</div>
 						<div className="row">
 							{/* table tasklist */}
-							<TaskList tasks={ tasks }/>
+							<TaskList
+								onUpdateStatus = { this.onUpdateStatus } 
+								onDelete = { this.onDelete }
+								onUpdate = { this.onUpdate }
+								tasks={ tasks }
+								/>
 						</div>
 					</div>
 				</div>

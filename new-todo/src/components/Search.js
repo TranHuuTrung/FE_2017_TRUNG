@@ -7,8 +7,7 @@ class Search extends Component {
                 <input 
                     type="text" 
                     className="form-control" 
-                    id="exampleInputAmount" 
-                    placeholder="Amount"
+                    placeholder="search todo"
                 />
                 <span className="input-group-btn">
                     <button type="button" className="btn btn-primary">
