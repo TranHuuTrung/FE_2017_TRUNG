@@ -6,9 +6,13 @@ class Control extends Component {
     return (
         <Fragment>
             {/* Search */}
-            <Search />
+            <Search onSearch ={ this.props.onSearch } />
             {/* Sort */}
-            <Sort />
+            <Sort 
+              onSort={ this.props.onSort }
+              sortBy = { this.props.sortBy }
+              sortValue = { this.props.sortValue }
+              />
         </Fragment>
     );
   }

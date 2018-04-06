@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 class TaskItem extends Component {
     onUpdateStatus = () =>{
         // console.log(this.props.task.id);
-        this.props.onUpdateStatus(this.props.task.id);  
-        
+        this.props.onUpdateStatus(this.props.task.id);    
     }
     onDelete = () =>{
         this.props.onDelete(this.props.task.id);

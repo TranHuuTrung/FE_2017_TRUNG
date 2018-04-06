@@ -9,7 +9,11 @@ class App extends Component {
 		super(props);
 		this.state={
 			tasks: [],
-			isDisplayForm: false 
+			isDisplayForm: false,
+			taskEditing: null,
+			keyword : '',
+			sortBy : 'name',
+			sortValue: 1
 		}
 	}
 	//goi khi load lai trang
@@ -28,8 +32,22 @@ class App extends Component {
 		return this.s4() + this.s4() + '-'+ this.s4()+this.s4()+'-'+ this.s4()+this.s4();
 	}
 	onToggleForm= () => {
-        this.setState({
-			isDisplayForm: !this.state.isDisplayForm
+		if( this.state.isDisplayForm && this.state.taskEditing !== null){
+			this.setState({
+				isDisplayForm: true,
+				taskEditing: null
+			});
+		}else{
+			this.setState({
+				isDisplayForm: !this.state.isDisplayForm,
+				taskEditing: null
+			});
+		}
+        
+	}
+	onOpenForm = () =>{
+		this.setState({
+			isDisplayForm: true
 		})
 	}
 	onCloseForm = () =>{
@@ -39,10 +57,18 @@ class App extends Component {
 	}
 	onSubmit = (data) =>{
 		var { tasks } = this.state;
-		data.id = this.genarateID();
-		tasks.push(data);
+		if( data.id === ''){
+			data.id = this.genarateID();
+			tasks.push(data);
+		}else{
+			var index = this.findIndex(data.id);
+			tasks[index] = data;
+		}
+		// data.id = this.genarateID();
+		// tasks.push(data);
 		this.setState({
-			tasks : tasks
+			tasks : tasks,
+			taskEditing: null
 		});
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 		
@@ -84,15 +110,55 @@ class App extends Component {
 	}
 	onUpdate = (id) =>{
 		var { tasks } = this.state;
-		console.log(id);
+		var index = this.findIndex(id);
+		var taskEditing = tasks[index];
+		this.setState({
+			taskEditing : taskEditing
+		});
+		this.onOpenForm();
+		
+	}
+	onSearch = (keyword) =>{
+		this.setState({
+           keyword: keyword.toLowerCase()
+		});
+		
+	}
+	onSort = (sortBy, sortValue) =>{
+		this.setState({
+			sortBy : sortBy,
+			sortValue: sortValue
+		});
 		
 	}
 	render() {
-		var { tasks, isDisplayForm } = this.state; //var tasks = this.state.tasks
+		var { tasks, isDisplayForm, taskEditing, keyword, sortBy, sortValue } = this.state; //var tasks = this.state.tasks
+		if(keyword){
+			tasks = tasks.filter((task) =>{
+				return task.name.toLowerCase().indexOf(keyword) !== -1;
+			});
+			
+		}
+		if(sortBy === 'name'){
+			tasks.sort((task1, task2) => {
+				if(task1.name.toLowerCase() > task2.name.toLowerCase()) return sortValue;
+				else if(task1.name.toLowerCase() < task2.name.toLowerCase() ) return -sortValue;
+				else return 0;
+			});
+		}
+		if(sortBy === 'status'){
+			tasks.sort((task1, task2) => {
+				if(task1.status > task2.status) return -sortValue;
+				else if(task1.status < task2.status ) return sortValue;
+				else return 0;
+			});
+		}
 		var eleForm = isDisplayForm 
 					  ? <TaskForm 
 					    	onSubmit ={ this.onSubmit } 
-					  		onCloseForm={ this.onCloseForm }/> : '';
+					  		onCloseForm={ this.onCloseForm }
+						    task = { taskEditing }	  
+						/> : '';
 		return (
 		<div className="container">
 				<div className="text-center mt-30">
@@ -115,7 +181,12 @@ class App extends Component {
 					
 						{/* Search and Sort */}
 						<div className="row mb-15">
-							<Control />
+							<Control 
+								onSearch = { this.onSearch }
+								onSort = { this.onSort }
+								sortBy = { sortBy }	
+								sortValue = { sortValue }	
+							/>
 						</div>
 						<div className="row">
 							{/* table tasklist */}

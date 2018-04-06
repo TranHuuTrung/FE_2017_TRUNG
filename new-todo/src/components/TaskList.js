@@ -16,7 +16,7 @@ class TaskList extends Component {
     return (
         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             
-            <table className="table table-bordered table-hover">
+            <table id="all-tasks" className="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th className="text-center">STT</th>
