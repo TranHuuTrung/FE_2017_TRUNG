@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import TaskForm from './components/TaskForm'
+import TaskForm from './components/TaskForm';
 import Control from './components/Control';
 import TaskList from './components/TaskList';
-
+import { demoRedux } from './redux/demoRedux';
 class App extends Component {
 	constructor(props){
 		super(props);
@@ -132,6 +132,7 @@ class App extends Component {
 		
 	}
 	render() {
+		<demoRedux />
 		var { tasks, isDisplayForm, taskEditing, keyword, sortBy, sortValue } = this.state; //var tasks = this.state.tasks
 		if(keyword){
 			tasks = tasks.filter((task) =>{
