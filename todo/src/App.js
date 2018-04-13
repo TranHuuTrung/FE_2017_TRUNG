@@ -65,8 +65,7 @@ class App extends Component {
     }
   }
   render() {
-    
-    <AppLogin />
+   
     var { isSignIn, isSignUp } = this.state;
     var eleSignUp = isSignUp? <SignUp onSubmitSignUp = { this.onSubmitSignUp }/> : '';
     var eleSignIn = isSignIn? <SignIn 
