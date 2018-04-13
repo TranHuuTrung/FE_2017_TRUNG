@@ -3,7 +3,7 @@ import './App.css';
 import TaskForm from './components/TaskForm';
 import Control from './components/Control';
 import TaskList from './components/TaskList';
-import { demoRedux } from './redux/demoRedux';
+import demoRedux from './redux/demoRedux';
 class App extends Component {
 	constructor(props){
 		super(props);
@@ -177,7 +177,7 @@ class App extends Component {
 							className="btn btn-primary mb-15"
 							onClick={ this.onToggleForm }
 						>
-							<span className="fa fa-plus"></span>&nbsp;Thêm công việc
+							<span className="fa fa-plus"></span>&nbsp;Thêm công việc mới
 						</button>
 					
 						{/* Search and Sort */}
