@@ -19,7 +19,7 @@ class SignUp extends Component {
   onSubmitSignUp = (event) =>{
     event.preventDefault();
     this.props.onSubmitSignUp(this.state);
-    this.onClear();
+    // this.onClear();
   }
   onClear= () =>{
     this.setState({

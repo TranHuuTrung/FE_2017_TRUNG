@@ -21,28 +21,25 @@ class App extends Component {
     });
   }
   onSubmitSignUp = (data) =>{
-    var { email, password } = this.state;
+    
     this.setState({
       email: data.email,
       password: data.password
     });
+    var { email, password } = this.state;
 
-  // save in API ----------------------//
-    console.log(JSON.stringify(userInfo));
-    console.log(userInfo.email +'-'+ userInfo.password);
-
-    
-    // let urlApifirst = "https://herokutuan.herokuapp.com";
+    // save in API ----------------------//
+    // console.log(JSON.stringify(userInfo));
+    // console.log(userInfo.email +'-'+ userInfo.password);  
+    let urlApifirst = "https://herokutuan.herokuapp.com";
     var result = $.ajax({
       type: 'POST',
       crossDomain: true,
-      url : "https://herokutuan.herokuapp.com/auth",
+      url : urlApifirst+"/auth",
       data: {
-          'email'     : email,
-          'password'  : password
+          'email'     : data.email,
+          'password'  : data.password
       },
-      // contentType : 'application/json',
-      // data: JSON.stringify(dataSend),
     });
     result.done(function(data){
       console.log(data);
@@ -52,12 +49,8 @@ class App extends Component {
       console.log("erorr");
       alert("Email already exists !");
     });
-
-
-  // //-----------------------------------//
-  }
+  }//end onSignUp
  
-  
   // componentWillMount() {
   //   if (localStorage && localStorage.getItem('userInfo')) {
   //     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -75,19 +68,32 @@ class App extends Component {
   //   }
   // }
   onSubmitSignIn = (data) => {
-    var { userInfo} = this.state;
-    var isLogin = false;
-    userInfo.forEach((user,index)=>{
-      if ((user.email === data.email) && (user.password === data.password)){
-          isLogin = true;
-        }
-    });
-    if (isLogin) {
-      alert("Login success");
-    } else {
-      alert("Error");
-      
-    }
+    // var { userInfo} = this.state;
+    // var isLogin = false;
+    let urlApifirst = "https://herokutuan.herokuapp.com";
+    var request = $.ajax({
+      type: 'POST',
+      url: urlApifirst+"/auth/sign_in",
+      data:{
+          'email'    : data.email,
+          'password' : data.password
+      }
+      });
+      request.done(function(data, textStatus, jqXHR){
+          var uid         = jqXHR.getResponseHeader("Uid");
+          var accessToken = jqXHR.getResponseHeader("Access-Token");
+          var client      = jqXHR.getResponseHeader("Client");
+          // var name        = data.name;
+          // var Id      = data('id');
+          localStorage.uid = uid;
+          localStorage.accessToken = accessToken;
+          localStorage.client = client;
+          // localStorage.name = name;
+          alert("Success Login!");
+      });
+      request.fail(function(){
+          alert("Thông tin đăng nhập bị sai!");
+      });
   }
   render() {
     console.log(this.state.email +'-'+  this.state.password);

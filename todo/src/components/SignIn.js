@@ -35,7 +35,7 @@ class SignIn extends Component {
         // var { isLogin } = this.state;
         event.preventDefault();
         this.props.onSubmitSignIn(this.state);
-        this.onClear();
+        // this.onClear();
         // if (isLogin) {
         //     this.onClear();
         // } else {
