@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery'; 
 import './App.css';
 import HeaderLogo from './components/HeaderLogo';
 import SignUp from './components/SignUp';
@@ -7,16 +8,11 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      userInfo : [], // luu thong tin duoi localStorage
+      email: '',
+      password: '',
       isSignUp : false,
       isSignIn: false
     }
-  }
-  randomID(){
-    return Math.floor((1+Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  GenarateID(){
-    return this.randomID()+ this.randomID()+'-'+this.randomID()+'-'+this.randomID()+ this.randomID()+'-'+this.randomID();
   }
   onActionChoose = (number) => {
     this.setState({
@@ -25,30 +21,59 @@ class App extends Component {
     });
   }
   onSubmitSignUp = (data) =>{
-    var { userInfo } = this.state;
-    data.id = this.GenarateID();
-    userInfo.push(data);
+    var { email, password } = this.state;
     this.setState({
-      userInfo : userInfo
+      email: data.email,
+      password: data.password
     });
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+  // save in API ----------------------//
+    console.log(JSON.stringify(userInfo));
+    console.log(userInfo.email +'-'+ userInfo.password);
+
+    
+    // let urlApifirst = "https://herokutuan.herokuapp.com";
+    var result = $.ajax({
+      type: 'POST',
+      crossDomain: true,
+      url : "https://herokutuan.herokuapp.com/auth",
+      data: {
+          'email'     : email,
+          'password'  : password
+      },
+      // contentType : 'application/json',
+      // data: JSON.stringify(dataSend),
+    });
+    result.done(function(data){
+      console.log(data);
+      alert("Đăng kí thành công!");
+    });
+    result.fail(function(jqXHR, textStatus){
+      console.log("erorr");
+      alert("Email already exists !");
+    });
+
+
+  // //-----------------------------------//
   }
-  componentWillMount() {
-    if (localStorage && localStorage.getItem('userInfo')) {
-      var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      this.setState({
-        userInfo: userInfo
-      });
-    }
-  }
-  componentWillReceiveProps(nextProps){
-    if (localStorage && localStorage.getItem('userInfo')) {
-      var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      this.setState({
-        userInfo: userInfo
-      });
-    }
-  }
+ 
+  
+  // componentWillMount() {
+  //   if (localStorage && localStorage.getItem('userInfo')) {
+  //     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  //     this.setState({
+  //       userInfo: userInfo
+  //     });
+  //   }
+  // }
+  // componentWillReceiveProps(nextProps){
+  //   if (localStorage && localStorage.getItem('userInfo')) {
+  //     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  //     this.setState({
+  //       userInfo: userInfo
+  //     });
+  //   }
+  // }
   onSubmitSignIn = (data) => {
     var { userInfo} = this.state;
     var isLogin = false;
@@ -65,6 +90,7 @@ class App extends Component {
     }
   }
   render() {
+    console.log(this.state.email +'-'+  this.state.password);
     var { isSignIn, isSignUp } = this.state;
     var eleSignUp = isSignUp? <SignUp onSubmitSignUp = { this.onSubmitSignUp }/> : '';
     var eleSignIn = isSignIn? <SignIn 
