@@ -5,7 +5,8 @@ class SignUp extends Component {
       this.state={
           email: '',
           password: '',
-          rePassword: ''
+          rePassword: '',
+          isSuccessSignUp: false
       }
   }
   onChange = (event) =>{
@@ -19,7 +20,17 @@ class SignUp extends Component {
   onSubmitSignUp = (event) =>{
     event.preventDefault();
     this.props.onSubmitSignUp(this.state);
-    // this.onClear();
+    if(this.props.isSuccessSignUp){
+        this.setState({
+            isSuccessSignUp: this.props.isSuccessSignUp
+        });
+        this.onClear();
+    }
+  }
+  componentWillReceiveProps(nextProps){
+      this.setState({
+        isSuccessSignUp: nextProps.isSuccessSignUp
+      })
   }
   onClear= () =>{
     this.setState({
@@ -29,6 +40,7 @@ class SignUp extends Component {
     })
   }
   render() {
+    var { isSuccessSignUp } = this.setState;
     return ( 
         <div className="col-md-4 col-md-offset-4">
             <div className="panel panel-primary mt-20">
@@ -62,7 +74,7 @@ class SignUp extends Component {
                                 placeholder="password" 
                                 name="password"
                                 required="required" 
-                                value={ this.state.password }
+                                value = { this.state.password }
                                 onChange = { this.onChange }
                                 />
                         </div>
@@ -83,6 +95,10 @@ class SignUp extends Component {
                         <div className="text-center mt-20">
                             <button type="submit" className="btn btn-success" >Sign up</button> &nbsp;
                             <button type="button" className="btn btn-danger" onClick = { this.onClear}>Reset</button>
+                        </div>
+
+                        <div className="text-center mt-20">
+                            <span className={isSuccessSignUp?"fa fa-spinner fa-pulse fa-3x fa-fw":""}></span>
                         </div>
                    </form>
 

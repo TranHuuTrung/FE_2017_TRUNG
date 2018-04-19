@@ -1,1 +1,1 @@
-Tran Huu Trung is handsome :v
+Trung is handsome :v
