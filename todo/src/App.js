@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import HeaderLogo from './components/HeaderLogo';
+import HeaderAdmin from './admin/HeaderAdmin';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
+import Home from './admin/Home'
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      // email: '',
-      // password: '',
       isSignUp : false,
-      isSuccessSignUp: false,
-      isSignIn: true,
-      isSuccessLogin: false
+      isRegistered: false,
+      isSignInForm: true,
+      isLoggedIn: false,
+      isHomePage: false,
     }
   }
+  //Chon form hien thi dang ki hoac dang nhap
   onActionChoose = (number) => {
     this.setState({
       isSignUp: (number === 1)?true:false,
-      isSignIn: (number === 2)?true:false
+      isSignInForm: (number === 2 || number===3)?true:false,
     });
   }
+  //Khi nguoi dung dang ki thong tin 
   onSubmitSignUp = (data) =>{
-
     // save in API ----------------------//
     console.log(data.email +'-'+data.password);  
     var url = 'https://herokutuan.herokuapp.com/auth';
@@ -30,9 +32,8 @@ class App extends Component {
               'email'     : data.email,
               'password'  : data.password
             };
-
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: 'POST',
       body: JSON.stringify(dataSend), // data can be `string` or {object}!
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -48,20 +49,24 @@ class App extends Component {
       console.log('data is', data);
       this.setState({
         isSuccessSignUp: true,
-        isSignIn: true,
+        isSignInForm: true,
         isSignUp: false
       });
     })
-    .catch(error => console.log('error is', error));
+    .catch(error => {
+      alert("Email không đúng hoặc đã tồn tại!");
+      console.log('error is', error)
+    });
   }//end onSignUp
 
   //Login user
   onSubmitSignIn = (data) => {
-    var {isSuccessLogin} = this.state;
+  
     var url = 'https://herokutuan.herokuapp.com/auth/sign_in';
-    var dataLogin = {'email'     : data.email,
-                    'password'  : data.password
-                    };
+    var dataLogin = {
+                  'email'     : data.email,
+                  'password'  : data.password
+                };
     fetch(url, {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(dataLogin), // data can be `string` or {object}!
@@ -75,12 +80,11 @@ class App extends Component {
           return Promise.reject('something went wrong!')
         }
     }).then(data =>{
-      alert("Đăng nhập thành công!");
       console.log('data is', data);
       this.setState({
-        isSuccessLogin: true
+        isSignInForm: false,
+        isLoggedIn: true,
       });
-      console.log(isSuccessLogin);
       
     })
     .catch(error =>{
@@ -90,28 +94,31 @@ class App extends Component {
      
   }
   render() {
-    // console.log(this.state.email +'-'+  this.state.password);
-    var { isSignIn, isSignUp, isSuccessSignUp, isSuccessLogin } = this.state;
+
+    var { isSignInForm, isSignUp, isRegistered, isLoggedIn} = this.state;
     var eleSignUp = isSignUp? <SignUp 
                                     onSubmitSignUp = { this.onSubmitSignUp }
-                                    isSuccessSignUp = { isSuccessSignUp }
+                                    isRegistered = { isRegistered }
                                     /> : '';
-    var eleSignIn = isSignIn? <SignIn 
+    var eleSignIn = isSignInForm? <SignIn 
                                     onActionChoose = {this.onActionChoose}
                                     onSubmitSignIn = { this.onSubmitSignIn }
-                                    isSuccessLogin = { isSuccessLogin }
+                                    isLoggedIn = { isLoggedIn }
                                     /> : '';
-    // var isSuccessPage = isSuccess ? <SuccessLogin /> : '';
+    var headerPages = isLoggedIn? <HeaderAdmin />: <HeaderLogo  onActionChoose = { this.onActionChoose } />;
+    var templateTodo = isLoggedIn? <Home />: '';
+
     return ( 
        <div>
           {/* logo header */}
-          <HeaderLogo onActionChoose = { this.onActionChoose } />
+          { headerPages }
           
           <div className="row">
             {/* form sign up  */}
              {eleSignUp} 
             {/* form login */}
              {eleSignIn}
+             {templateTodo}
           {/* {isSuccessPage} */}
           </div>   
        </div>

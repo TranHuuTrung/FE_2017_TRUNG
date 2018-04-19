@@ -1,0 +1,21 @@
+import React, { Component, Fragment } from 'react';
+import Search from './Search'
+import Sort from './Sort'
+class Control extends Component {
+  render() {
+    return (
+        <Fragment>
+            {/* Search */}
+            <Search onSearch ={ this.props.onSearch } />
+            {/* Sort */}
+            <Sort 
+              onSort={ this.props.onSort }
+              sortBy = { this.props.sortBy }
+              sortValue = { this.props.sortValue }
+              />
+        </Fragment>
+    );
+  }
+}
+
+export default Control;

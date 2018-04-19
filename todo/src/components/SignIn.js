@@ -5,7 +5,7 @@ class SignIn extends Component {
         this.state= {
             email:'',
             password: '',
-            isSuccessLogin: false,//0 bat dau, 1,login 2,error
+            isLoggedIn: false,//0 bat dau, 1,login 2,error
         }
     }
     onReturnSignUp=() =>{
@@ -20,19 +20,18 @@ class SignIn extends Component {
         })
     }
     onSubmitSignIn = (event) =>{
-        // var { isSuccessLogin } = this.state;
         event.preventDefault();
         this.props.onSubmitSignIn(this.state);
-        if(this.props.isSuccessLogin){
+        if(this.props.isLoggedIn){
             this.setState({
-                isSuccessLogin: this.props.isSuccessLogin
+                isLoggedIn: this.props.isLoggedIn
             });
             this.onClear();
         }
     }
     componentWillReceiveProps(nextProps){
         this.setState({
-          isSuccessLogin: nextProps.isSuccessLogin
+            isLoggedIn: nextProps.isLoggedIn
         })
     }
     onClear = () => {
@@ -97,16 +96,11 @@ class SignIn extends Component {
                              className="btn btn-danger"
                              onClick = { this.onClear }
                         >Reset</button>
-                        {/* <div className="alert alert-success mt-20">
-                            <a className="close" data-dismiss="alert">×</a>You are Login!
-                        </div> */}
                         <hr />
                         <div className="form-group">
                             Don't have an account!
                             <a onClick={() => this.onReturnSignUp()} className="ml-5">Sign up here</a>
                         </div>
-    
-                        {/* <h2>It is {new Date().toLocaleTimeString()}.</h2> */}
                    </form>
                 </div>
             </div>
