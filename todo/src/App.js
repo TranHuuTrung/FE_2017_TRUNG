@@ -7,16 +7,13 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      userInfo : [], // luu thong tin duoi localStorage
+      // email: '',
+      // password: '',
       isSignUp : false,
-      isSignIn: false
+      isSuccessSignUp: false,
+      isSignIn: true,
+      isSuccessLogin: false
     }
-  }
-  randomID(){
-    return Math.floor((1+Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  GenarateID(){
-    return this.randomID()+ this.randomID()+'-'+this.randomID()+'-'+this.randomID()+ this.randomID()+'-'+this.randomID();
   }
   onActionChoose = (number) => {
     this.setState({
@@ -25,51 +22,84 @@ class App extends Component {
     });
   }
   onSubmitSignUp = (data) =>{
-    var { userInfo } = this.state;
-    data.id = this.GenarateID();
-    userInfo.push(data);
-    this.setState({
-      userInfo : userInfo
-    });
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-  }
-  componentWillMount() {
-    if (localStorage && localStorage.getItem('userInfo')) {
-      var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      this.setState({
-        userInfo: userInfo
-      });
-    }
-  }
-  componentWillReceiveProps(nextProps){
-    if (localStorage && localStorage.getItem('userInfo')) {
-      var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      this.setState({
-        userInfo: userInfo
-      });
-    }
-  }
-  onSubmitSignIn = (data) => {
-    var { userInfo} = this.state;
-    var isLogin = false;
-    userInfo.forEach((user,index)=>{
-      if ((user.email === data.email) && (user.password === data.password)){
-          isLogin = true;
+
+    // save in API ----------------------//
+    console.log(data.email +'-'+data.password);  
+    var url = 'https://herokutuan.herokuapp.com/auth';
+    var dataSend = {
+              'email'     : data.email,
+              'password'  : data.password
+            };
+
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(dataSend), // data can be `string` or {object}!
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return Promise.reject('email đã tồn tại!')
         }
-    });
-    if (isLogin) {
-      alert("Login success");
-    } else {
-      alert("Error");
+    }).then(data =>{
+      alert("Đăng kí thành công!");
+      console.log('data is', data);
+      this.setState({
+        isSuccessSignUp: true,
+        isSignIn: true,
+        isSignUp: false
+      });
+    })
+    .catch(error => console.log('error is', error));
+  }//end onSignUp
+
+  //Login user
+  onSubmitSignIn = (data) => {
+    var {isSuccessLogin} = this.state;
+    var url = 'https://herokutuan.herokuapp.com/auth/sign_in';
+    var dataLogin = {'email'     : data.email,
+                    'password'  : data.password
+                    };
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(dataLogin), // data can be `string` or {object}!
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return Promise.reject('something went wrong!')
+        }
+    }).then(data =>{
+      alert("Đăng nhập thành công!");
+      console.log('data is', data);
+      this.setState({
+        isSuccessLogin: true
+      });
+      console.log(isSuccessLogin);
       
-    }
+    })
+    .catch(error =>{
+      alert("Email hoặc mật khẩu không đúng!");
+      console.log('error is', error);
+    });
+     
   }
   render() {
-    var { isSignIn, isSignUp } = this.state;
-    var eleSignUp = isSignUp? <SignUp onSubmitSignUp = { this.onSubmitSignUp }/> : '';
+    // console.log(this.state.email +'-'+  this.state.password);
+    var { isSignIn, isSignUp, isSuccessSignUp, isSuccessLogin } = this.state;
+    var eleSignUp = isSignUp? <SignUp 
+                                    onSubmitSignUp = { this.onSubmitSignUp }
+                                    isSuccessSignUp = { isSuccessSignUp }
+                                    /> : '';
     var eleSignIn = isSignIn? <SignIn 
-                                    onActionChoose={this.onActionChoose}
+                                    onActionChoose = {this.onActionChoose}
                                     onSubmitSignIn = { this.onSubmitSignIn }
+                                    isSuccessLogin = { isSuccessLogin }
                                     /> : '';
     // var isSuccessPage = isSuccess ? <SuccessLogin /> : '';
     return ( 

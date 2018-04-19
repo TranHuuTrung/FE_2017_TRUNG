@@ -5,15 +5,9 @@ class SignIn extends Component {
         this.state= {
             email:'',
             password: '',
-            // isLogin: false,//0 bat dau, 1,login 2,error
+            isSuccessLogin: false,//0 bat dau, 1,login 2,error
         }
     }
-    // componentWillReceiveProps(nextProps){
-    //         this.setState({
-    //             isLogin : this.props.isSuccess
-    //         });
-            
-    // }
     onReturnSignUp=() =>{
         this.props.onActionChoose(1);
     }
@@ -25,25 +19,27 @@ class SignIn extends Component {
             [name] : value
         })
     }
+    onSubmitSignIn = (event) =>{
+        // var { isSuccessLogin } = this.state;
+        event.preventDefault();
+        this.props.onSubmitSignIn(this.state);
+        if(this.props.isSuccessLogin){
+            this.setState({
+                isSuccessLogin: this.props.isSuccessLogin
+            });
+            this.onClear();
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({
+          isSuccessLogin: nextProps.isSuccessLogin
+        })
+    }
     onClear = () => {
         this.setState({
             email: '',
             password: '',
         })
-    }
-    onSubmitSignIn = (event) =>{
-        // var { isLogin } = this.state;
-        event.preventDefault();
-        this.props.onSubmitSignIn(this.state);
-        this.onClear();
-        // if (isLogin) {
-        //     this.onClear();
-        // } else {
-        //     //bao loi 
-        // }
-        
-        // neu login thi setState cua isStatusLogin = 1
-        //nguoc lai thi isStatusLogin = 2
     }
   render() {
     return ( 
@@ -110,7 +106,7 @@ class SignIn extends Component {
                             <a onClick={() => this.onReturnSignUp()} className="ml-5">Sign up here</a>
                         </div>
     
-                        <h2>It is {new Date().toLocaleTimeString()}.</h2>
+                        {/* <h2>It is {new Date().toLocaleTimeString()}.</h2> */}
                    </form>
                 </div>
             </div>
