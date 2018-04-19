@@ -1,1 +1,0 @@
-Trung is handsome :v
