@@ -1,86 +1,51 @@
 import React, { Component } from 'react';
-class TaskForm extends Component {
+class AddTaskFrom extends Component {
     constructor(props){
         super(props);
-        this.state={
-            id : '',
-            name: '',
-            status: false,
-          
+        this.state ={
+            name: ""
         }
-    }
-    //ham nay chi duoc goi 1 lan duy nhat khi component duoc goi lan dau
-    componentWillMount(){
-        if(this.props.task){
-            this.setState({
-                id: this.props.task.id,
-                name: this.props.task.name,
-                status: this.props.task.status
-            });
-        }
-        
-    }
-     //ham nay chi duoc goi khi component duoc goi 
-     componentWillReceiveProps( nextProps){
-        if(nextProps && nextProps.task){
-            this.setState({
-                id: nextProps.task.id,
-                name: nextProps.task.name,
-                status: nextProps.task.status
-            });
-        }else if(nextProps && nextProps.task=== null){
-            this.setState({
-                id : '',
-                name: '',
-                status: false,
-            });
-        }
-        
-    }
-    onCloseForm = () =>{
-        this.props.onCloseForm();
     }
     onHandleChange = (event) =>{
         var target = event.target;
         var name   = target.name;
         var value  = target.value;
-        if( name === 'status'){
-           value =  target.value === 'true'? true : false;
-        }
         this.setState({
             [name] : value
         });
     }
-    onSubmit = (event) =>{
+    onSubmitAdd = (event) =>{
         event.preventDefault();
         // console.log(this.state);
-        this.props.onSubmit(this.state);
+        this.props.onSubmitAdd(this.state);
         this.onClear();
         this.onCloseForm();
         
     }
     onClear = () =>{
         this.setState({
-            name : '',
-            status: false
+            name : ''
         });
     }
+    onCloseForm = () =>{
+        this.props.onCloseForm();
+    }
     render() {
-        var { id } = this.state;
+       
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
                     <h3 className="panel-title">
-                        { id !== ''? 'Chỉnh sửa công việc'  : 'Tạo mới công việc'} 
+                         Tạo mới TaskList
                         <span 
                             className="fa fa-times-circle text-right"
-                            onClick={ this.props.onCloseForm}
+                            onClick = { this.onCloseForm }
                         ></span>
                     </h3>
                 </div>
                 <div className="panel-body">
                     
-                    <form onSubmit= { this.onSubmit }>
+                    <form onSubmit= { this.onSubmitAdd }>
                         <div className="form-group">
                             <label >Tên công việc:</label>
                             <input 
@@ -93,16 +58,6 @@ class TaskForm extends Component {
                                 />
                             
                         </div>
-                        <label >Trạng thái:</label>
-                        <select 
-                            className="form-control" 
-                            name="status"
-                            value= { this.state.status }
-                            onChange={ this.onHandleChange }
-                            >
-                            <option value={true}>Kích hoạt </option>
-                            <option value={false}>Ẩn</option>
-                        </select> <br/>
                         <div className="text-center">
                             <button type="submit" className="btn btn-success">
                                 <span className="fa fa-plus"></span>&nbsp;Lưu Lại
@@ -123,4 +78,4 @@ class TaskForm extends Component {
     }
 }
 
-export default TaskForm;
+export default AddTaskFrom;

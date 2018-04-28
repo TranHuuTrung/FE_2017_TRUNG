@@ -95,9 +95,9 @@ class SignUp extends Component {
                     <button type="button" className="btn btn-danger" onClick = { this.onClear}>Reset</button>
                 </div>
 
-                <div className="text-center mt-20">
+                {/* <div className="text-center mt-20">
                     <span className={"fa fa-spinner fa-pulse fa-3x fa-fw"}></span>
-                </div>
+                </div> */}
               </form>
 
              </div>

@@ -9,18 +9,18 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isSignUp : false,
+      isSignUpForm : false,
       isRegistered: false,
       isSignInForm: true,
       isLoggedIn: false,
-      isHomePage: false,
+      isHomePage: false
     }
   }
   //Chon form hien thi dang ki hoac dang nhap
   onActionChoose = (number) => {
     this.setState({
-      isSignUp: (number === 1)?true:false,
-      isSignInForm: (number === 2 || number===3)?true:false,
+      isSignUpForm: (number === 1)?true:false,
+      isSignInForm: (number === 2)?true:false,
     });
   }
   //Khi nguoi dung dang ki thong tin 
@@ -50,7 +50,7 @@ class App extends Component {
       this.setState({
         isSuccessSignUp: true,
         isSignInForm: true,
-        isSignUp: false
+        isSignUpForm: false
       });
     })
     .catch(error => {
@@ -79,12 +79,20 @@ class App extends Component {
         } else {
           return Promise.reject('something went wrong!')
         }
-    }).then(data =>{
-      console.log('data is', data);
-      this.setState({
-        isSignInForm: false,
-        isLoggedIn: true,
-      });
+    }).then((responseText) =>{
+      console.log(responseText);
+      
+      // var uid         = jqXHR.getResponseHeader("Uid");
+      // var accessToken = jqXHR.getResponseHeader("Access-Token");
+      // var client      = jqXHR.getResponseHeader("Client");
+      // console.log('data is', data);
+      // localStorage.uid = uid;
+      // localStorage.accessToken = accessToken;
+      // localStorage.client = client;  
+      // this.setState({
+      //   isSignInForm: false,
+      //   isLoggedIn: true,
+      // });
       
     })
     .catch(error =>{
@@ -95,8 +103,8 @@ class App extends Component {
   }
   render() {
 
-    var { isSignInForm, isSignUp, isRegistered, isLoggedIn} = this.state;
-    var eleSignUp = isSignUp? <SignUp 
+    var { isSignInForm, isSignUpForm, isRegistered, isLoggedIn} = this.state;
+    var eleSignUp = isSignUpForm? <SignUp 
                                     onSubmitSignUp = { this.onSubmitSignUp }
                                     isRegistered = { isRegistered }
                                     /> : '';
