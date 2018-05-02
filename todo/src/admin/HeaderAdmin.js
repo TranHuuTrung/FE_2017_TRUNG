@@ -1,7 +1,7 @@
 import React, { Component , Fragment} from 'react';
 class HeaderAdmin extends Component {
    onLogout = () =>{
-      this.props.onActionChoose(3);
+      this.props.onLogout(3);
       
    }
 

@@ -3,8 +3,34 @@ class AddTaskFrom extends Component {
     constructor(props){
         super(props);
         this.state ={
-            name: ""
+            name: "",
+            id: ""
         }
+    }
+    //ham nay chi duoc goi 1 lan duy nhat khi component duoc goi lan dau
+    componentWillMount(){
+        if(this.props.task){
+            this.setState({
+                id: this.props.task.id,
+                name: this.props.task.name
+            });
+        }
+        
+    }
+     //ham nay chi duoc goi khi component duoc goi 
+     componentWillReceiveProps( nextProps){
+        if(nextProps && nextProps.task){
+            this.setState({
+                id: nextProps.task.id,
+                name: nextProps.task.name
+            });
+        }else if(nextProps && nextProps.task=== null){
+            this.setState({
+                id : '',
+                name: '',
+            });
+        }
+        
     }
     onHandleChange = (event) =>{
         var target = event.target;
@@ -16,7 +42,6 @@ class AddTaskFrom extends Component {
     }
     onSubmitAdd = (event) =>{
         event.preventDefault();
-        // console.log(this.state);
         this.props.onSubmitAdd(this.state);
         this.onClear();
         this.onCloseForm();
@@ -31,12 +56,12 @@ class AddTaskFrom extends Component {
         this.props.onCloseForm();
     }
     render() {
-       
+       var { id } = this.state;
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
                     <h3 className="panel-title">
-                         Tạo mới TaskList
+                    { id !== ''? 'Chỉnh sửa TaskList'  : 'Tạo mới TaskList'}  
                         <span 
                             className="fa fa-times-circle text-right"
                             onClick = { this.onCloseForm }
@@ -47,7 +72,7 @@ class AddTaskFrom extends Component {
                     
                     <form onSubmit= { this.onSubmitAdd }>
                         <div className="form-group">
-                            <label >Tên công việc:</label>
+                            <label >Tên tasklist:</label>
                             <input 
                                 type="text" 
                                 name="name" 

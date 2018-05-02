@@ -5,9 +5,7 @@ class HeaderLogo extends Component {
    }
    onSignIn = () =>{
       this.props.onActionChoose(2);
-      
    }
-
   render() {
   
     return ( 
