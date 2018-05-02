@@ -3,6 +3,8 @@ import axios from 'axios';
 import './Home.css'
 import TaskList from './task-components/TaskList';
 import AddTaskFrom from './task-components/AddTaskFrom';
+import * as api_url from '../constants/index';
+
 class Home extends Component {
 	constructor(props){
 		super(props);
@@ -35,18 +37,15 @@ class Home extends Component {
 			isDisplayFormAdd: false
 		})
 	}
+
 	//Lay tat ca TaskList de hien thi trong bang 
 	getAllTask = () =>{
 		var self = this;
 		var {tasks} = this.state;
 		axios({
 			method: 'GET',
-			url: 'https://herokutuan.herokuapp.com/task_lists',
-			headers:{
-					'access-token': localStorage.accessToken,
-					'uid': localStorage.uid,
-					'client': localStorage.client
-			}
+			url: api_url.API_URL+'/task_lists',
+			headers: api_url.HEADER
 		}).then(function (response){
 			var i = 0;
 			console.log(response.data.length);
@@ -67,13 +66,8 @@ class Home extends Component {
 			//thuc hien sua ten task
 			axios({
 				method: 'PATCH',
-				url: `https://herokutuan.herokuapp.com/task_lists/${id}`,
-				headers: {
-					'access-token'  : localStorage.accessToken,
-					'uid' : localStorage.uid,
-					'client': localStorage.client,
-					'Content-Type' : 'application/json'
-				},
+				url: api_url.API_URL+`/task_lists/${id}`,
+				headers: api_url.HEADER,
 				data:  JSON.stringify(nameTask)
 			}).then(function (response){
 				self.setState({
@@ -90,13 +84,8 @@ class Home extends Component {
 			// them task moi
 			axios({
 				method: 'POST',
-				url: 'https://herokutuan.herokuapp.com/task_lists',
-				headers: {
-					'access-token'  : localStorage.accessToken,
-					'uid' : localStorage.uid,
-					'client': localStorage.client,
-					'Content-Type' : 'application/json'
-				},
+				url: api_url.API_URL+'/task_lists',
+				headers: api_url.HEADER,
 				data:  JSON.stringify(nameTask)
 			}).then(function (response){
 				self.setState({
@@ -136,12 +125,8 @@ class Home extends Component {
 		if(isSure){
 			axios({
 				method: 'DELETE',
-				url: 'https://herokutuan.herokuapp.com/task_lists/'+id,
-				headers:{
-						'access-token': localStorage.accessToken,
-						'uid': localStorage.uid,
-						'client': localStorage.client
-				}
+				url: api_url.API_URL+'/task_lists/'+id,
+				headers: api_url.HEADER
 			}).then(function (response){
 				self.setState({
 					tasks: []
@@ -161,6 +146,7 @@ class Home extends Component {
 																							task={taskEditing}
 																					/> : '';
 	return (
+		
 		<div className="container">
 			<div className="text-center mt-30">
 				<h1>All Your TaskList</h1>
