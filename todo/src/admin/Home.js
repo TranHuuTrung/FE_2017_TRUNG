@@ -4,6 +4,7 @@ import './Home.css'
 import TaskList from './task-components/TaskList';
 import AddTaskFrom from './task-components/AddTaskFrom';
 import * as api_url from '../constants/index';
+import AllTodo from './todo-component/AllTodo';
 
 class Home extends Component {
 	constructor(props){
@@ -138,6 +139,9 @@ class Home extends Component {
 			});
 		}
 	}
+	onDetail = (id) =>{
+		alert(id);
+	}
 	render(){
 		var { isDisplayFormAdd, tasks, taskEditing} = this.state;
 		var addTaskForm = isDisplayFormAdd	? <AddTaskFrom
@@ -169,6 +173,7 @@ class Home extends Component {
 							tasks = {tasks}
 							onUpdate = { this.onUpdate }
 							onDelete = { this.onDelete }
+							onDetail = { this.onDetail }
 							/>
 					</div>
 				</div>
